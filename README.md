@@ -14,6 +14,15 @@
 | Infra | Docker, AWS EC2 |
 | Build Tool | Gradle |
 
+## 개발 방식
+
+- **백엔드**: Claude와 대화하며 설계를 논의하고 직접 구현. 도메인 규칙
+  (상품 삭제 정책, JWT 전략 등)은 AI의 제안을 검토·반박하며 다듬는
+  방식으로 결정했고, 실제 코드는 직접 작성함.
+- **프론트엔드**: Claude Code를 활용해 화면 뼈대(라우팅, API 연동 기본
+  구조)를 스캐폴딩. 생성된 코드는 직접 검토·수정함. (관련 결정:
+  [`0003-frontend-scope.md`](./docs/decisions/0003-frontend-scope.md))
+
 ## 프로젝트 구조
 
 src/main/java/com/chanyoung/usedmarket/
@@ -21,6 +30,10 @@ src/main/java/com/chanyoung/usedmarket/
 ├── domain/     (도메인별 패키지: item, member 등)
 
 └── global/     (공통 설정, 예외처리, 시큐리티)
+
+## ERD
+
+전체 엔티티 관계는 [`docs/erd-overview.md`](./docs/erd-overview.md) 를 참고하세요.
 
 ## 설계 결정 기록
 
