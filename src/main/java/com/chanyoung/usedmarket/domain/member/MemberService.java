@@ -22,7 +22,7 @@ public class MemberService {
     @Transactional
     public Long signUp(SignUpRequestDto request) {
         if(memberRepository.existsByEmail(request.getEmail())){
-            throw new DuplicateEmailException("이미 가입된 이메일입니다.");
+            throw new DuplicateEmailException();
         }
 
         String encodedPassword = passwordEncoder.encode(request.getPassword());
@@ -36,14 +36,14 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MemberResponseDto getMyInfo(Long memberId){
-        Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
+        Member findMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         return MemberResponseDto.from(findMember);
 
     }
 
     @Transactional
     public void updateMyInfo(Long memberId, MemberUpdateRequestDto memberUpdateRequestDto) {
-        Member findMember = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException("회원을 찾을 수 없습니다."));
+        Member findMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
         findMember.changeNickname(memberUpdateRequestDto.getNickname());
 
     }

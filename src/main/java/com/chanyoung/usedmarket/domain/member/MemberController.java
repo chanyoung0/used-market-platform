@@ -1,6 +1,7 @@
 package com.chanyoung.usedmarket.domain.member;
 
 import com.chanyoung.usedmarket.domain.member.dto.SignUpRequestDto;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Long> signUp(@RequestBody SignUpRequestDto requestDto) {
+    public ResponseEntity<Long> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
         Long memberId = memberService.signUp(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(memberId);
     }

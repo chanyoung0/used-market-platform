@@ -1,8 +1,11 @@
 package com.chanyoung.usedmarket.domain.member.exception;
 
-public class MemberNotFoundException extends RuntimeException {
+import com.chanyoung.usedmarket.global.exception.BusinessException;
+import com.chanyoung.usedmarket.global.exception.ErrorCode;
 
-    public MemberNotFoundException(String message) {
-        super(message);
+public class MemberNotFoundException extends BusinessException {
+
+    public MemberNotFoundException() {
+        super(ErrorCode.MEMBER_NOT_FOUND);
     }
 }

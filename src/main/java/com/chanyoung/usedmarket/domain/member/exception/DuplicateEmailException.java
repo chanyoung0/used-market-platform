@@ -1,8 +1,11 @@
 package com.chanyoung.usedmarket.domain.member.exception;
 
-public class DuplicateEmailException extends RuntimeException {
+import com.chanyoung.usedmarket.global.exception.BusinessException;
+import com.chanyoung.usedmarket.global.exception.ErrorCode;
 
-    public DuplicateEmailException(String message) {
-        super(message);
+public class DuplicateEmailException extends BusinessException {
+
+    public DuplicateEmailException() {
+        super(ErrorCode.DUPLICATE_EMAIL);
     }
 }
