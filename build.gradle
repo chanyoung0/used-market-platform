@@ -39,6 +39,8 @@ dependencies {
 	annotationProcessor 'io.github.openfeign.querydsl:querydsl-apt:7.5:jpa'
 	annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
 	annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
+
+	implementation 'com.nimbusds:nimbus-jose-jwt:10.9.1'
 }
 
 def querydslDir = layout.buildDirectory.dir("generated/querydsl").get().asFile
