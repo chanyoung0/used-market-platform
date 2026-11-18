@@ -30,7 +30,7 @@ erDiagram
     int price
     String imageUrl
     String status
-    boolean isDeleted
+    boolean isDeleted "Transaction 단계에서 추가"
     DateTime createdAt
     DateTime updatedAt
   }
@@ -73,10 +73,11 @@ erDiagram
   "언제 완료됐는지"만 기록. `completedAt`이 null이면 진행중, 값이 있으면 완료.
 - **Transaction.requestId는 unique**: PurchaseRequest 하나당 Transaction이
   최대 1개까지만 생성되도록 보장.
-- **Product.isDeleted**: 상품 삭제/수정 정책에 따른 소프트 삭제 플래그.
-  구매 요청이 걸린 `판매중` 상품만 이 플래그로 숨김 처리되고, 요청이
-  없는 상품은 하드 삭제됨. `예약중`/`판매완료` 상태는 수정/삭제 자체가
-  금지됨. (관련 결정: [`0005-product-deletion-policy.md`](./decisions/0005-product-deletion-policy.md))
+- **Product.isDeleted**: 소프트 삭제 플래그. Product 단계에서는 이 필드를
+  두지 않고, `판매중` 상품은 하드 삭제하며 `예약중`/`판매완료` 상태는
+  수정/삭제 자체를 금지함. PurchaseRequest를 도입하는 Transaction 단계에서
+  필드를 추가하고, 그때부터 구매 요청이 걸린 `판매중` 상품만 이 플래그로
+  숨김 처리함. (관련 결정: [`0005-product-deletion-policy.md`](./decisions/0005-product-deletion-policy.md))
 - **Member.role**: 지금은 `USER`만 존재하지만, 확장 가능성을 열어두기
   위해 문자열(enum) 컬럼으로 미리 둠.
 - **Refresh Token 테이블 없음**: JWT는 Access Token만 발급하는 stateless
