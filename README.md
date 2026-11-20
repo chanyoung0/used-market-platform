@@ -79,6 +79,7 @@
 
 - [MVP 범위](./docs/mvp-scope.md): 기능 범위와 이번에 제외한 기능(Tier 2)
 - [ERD 개요](./docs/erd-overview.md): 엔티티 관계와 설계 메모
+- [클래스 다이어그램](./docs/class-diagram.md): Member, Product 엔티티의 필드, enum, 도메인 메서드 (초안, 구현하며 갱신)
 
 ## 프로젝트 구조
 
