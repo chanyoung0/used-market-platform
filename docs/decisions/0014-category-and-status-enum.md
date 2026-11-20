@@ -21,6 +21,8 @@ ERD에서 Product의 category와 status는 문자열 컬럼으로 정의되어 �
 - ProductStatus: ON_SALE(판매중), RESERVED(예약중), SOLD(판매완료)
 - 화면 표시용 한국어 이름은 enum의 별도 필드로 둠
 - DB 컬럼은 @JdbcTypeCode(SqlTypes.VARCHAR)로 VARCHAR를 명시함
+- 허용 값 목록을 DB에 두지 않음. Hibernate가 생성하는 CHECK 제약은 제거하고,
+  값 검증은 애플리케이션(enum 바인딩)이 담당함
 
 ## 이유
 ### 카테고리
@@ -46,11 +48,26 @@ ERD에서 Product의 category와 status는 문자열 컬럼으로 정의되어 �
   변경하지 않아, 새 값 저장 시 오류가 발생함. VARCHAR를 명시해 상수 추가 시
   스키마 변경이 필요 없도록 하고, ERD의 문자열 컬럼 정의와도 일치시킴.
 
+### CHECK 제약을 두지 않음
+- VARCHAR를 명시해도 Hibernate는 테이블 생성 시 enum 상수 목록으로
+  `CHECK (category in (...))` 제약을 함께 생성함. 이 프로젝트에서 실제 DDL로
+  확인했으며, 이 제약을 끄는 Hibernate 설정은 없음.
+- CHECK가 있으면 네이티브 ENUM과 같은 문제가 남음. 상수를 추가해도
+  ddl-auto=update는 기존 제약을 수정하지 않아, 새 값 저장 시 오류가 발생함.
+- 이 DB에 쓰는 경로는 이 애플리케이션 하나뿐이므로, DB 제약이 추가로 막아줄
+  경로가 없음. 카테고리는 추가될 가능성이 있는 값이라 변경 지점을 코드 한 곳으로
+  두는 편이 유리함.
+- 따라서 생성된 CHECK 제약은 제거함. 서버 재시작 후 ddl-auto=update가 기존
+  테이블에 제약을 다시 추가하지 않는 것을 확인함.
+
 ## 트레이드오프
-- 카테고리를 추가하려면 코드 수정과 재배포가 필요함. 카테고리는 자주 바뀌는
-  값이 아니므로 감수함.
-- VARCHAR로 저장하면 DB 수준에서 허용 값을 제한하지 않음. 값 검증은
+- 카테고리를 추가하려면 코드 수정과 재배포가 필요함. 대신 DB 스키마는 바꾸지
+  않아도 되도록 해, 추가 시 변경 지점을 코드 한 곳으로 줄임.
+- CHECK 제약을 두지 않으므로 DB 수준에서 허용 값을 제한하지 않음. 값 검증은
   애플리케이션(enum 바인딩)이 담당함.
+- Hibernate가 테이블을 새로 생성하면 CHECK 제약이 다시 생김. 배포 시에는
+  ddl-auto=update 대신 스키마를 직접 관리하는 방식으로 전환하고, 그때 CHECK 없이
+  테이블을 정의함.
 - enum 상수명은 DB 저장 값이자 API 요청 값이므로 단순 리팩터링으로 변경할
   수 없음. 이름 변경이나 삭제 시 기존 데이터 마이그레이션이 필요함.
 - 노출 순서, 계층 구조, 사용 중지 등 카테고리 자체의 데이터가 필요해지면
@@ -70,3 +87,5 @@ ERD에서 Product의 category와 status는 문자열 컬럼으로 정의되어 �
   ddl-auto=update는 기존 컬럼 타입을 변경하지 않으므로 로컬 DB는
   ALTER TABLE member MODIFY role VARCHAR(20) NOT NULL로 직접 변경함.
 - 이후 enum 필드는 모두 같은 방식(EnumType.STRING + VARCHAR 명시)으로 매핑함.
+- Product 테이블 최초 생성 시 category, status에 CHECK 제약이 생성되어,
+  로컬 DB에서 ALTER TABLE product DROP CHECK로 제거함.
