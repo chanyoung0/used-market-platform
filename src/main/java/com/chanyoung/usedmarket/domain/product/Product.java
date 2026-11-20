@@ -92,6 +92,7 @@ public class Product extends BaseEntity {
 
     //서비스에서 쓸 메서드
     public void validateDeletable(){
+        // TODO: Transaction 단계에서 구매 요청이 있는 상품은 소프트 삭제하도록 분기 추가 (ADR 0005)
         validateOnSale();
     }
 
