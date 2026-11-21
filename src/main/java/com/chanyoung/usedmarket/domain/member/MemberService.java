@@ -42,9 +42,9 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMyInfo(Long memberId, MemberUpdateRequestDto memberUpdateRequestDto) {
+    public void updateMyInfo(Long memberId, MemberUpdateRequestDto request) {
         Member findMember = memberRepository.findById(memberId).orElseThrow(MemberNotFoundException::new);
-        findMember.changeNickname(memberUpdateRequestDto.getNickname());
+        findMember.changeNickname(request.getNickname());
 
     }
 

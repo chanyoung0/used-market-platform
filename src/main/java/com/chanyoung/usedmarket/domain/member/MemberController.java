@@ -18,8 +18,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Long> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
-        Long memberId = memberService.signUp(requestDto);
+    public ResponseEntity<Long> signUp(@Valid @RequestBody SignUpRequestDto request) {
+        Long memberId = memberService.signUp(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(memberId);
     }
 
@@ -29,8 +29,8 @@ public class MemberController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<Void> updateMyInfo(@AuthenticationPrincipal Long memberId, @Valid @RequestBody MemberUpdateRequestDto updateRequestDto){
-        memberService.updateMyInfo(memberId ,updateRequestDto);
+    public ResponseEntity<Void> updateMyInfo(@AuthenticationPrincipal Long memberId, @Valid @RequestBody MemberUpdateRequestDto request){
+        memberService.updateMyInfo(memberId ,request);
         return ResponseEntity.noContent().build();
     }
 }

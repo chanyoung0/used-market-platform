@@ -19,9 +19,9 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional(readOnly = true)
-    public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        String email = loginRequestDto.getEmail();
-        String password = loginRequestDto.getPassword();
+    public LoginResponseDto login(LoginRequestDto request) {
+        String email = request.getEmail();
+        String password = request.getPassword();
 
         Member findMember = memberRepository.findByEmail(email).orElseThrow(InvalidCredentialsException::new);
 
